@@ -532,3 +532,91 @@ printf("! : %d\n", !calc2);
 || : 1
 ! : 0
 ```
+
+# 6. 함수
+**프로그래밍에서 함수(function)란 하나의 특별한 목적의 작업을 수행하기 위해 독립적으로 설계된 프로그램 코드의 집합으로 정의할 수 있다.**  
+**C 프로그램은 이러한 함수들로 구성**되며, 포함된 함수들을 사용하여 프로그램의 목적을 달성하게 된다.
+
+C 언어에서 함수는 크게 표준 함수와 사용자 정의 함수로 구분할 수 있다.
+
+## 6.1. 함수의 원형 선언
+C 언어에서 함수를 정의할 때는 그 위치가 매우 중요하다.
+```c
+#include <stdio.h>
+
+int main(void) 
+{
+   int calc;
+
+   calc = bigNum(3, 5);
+   printf("calc : %d\n", calc);
+   calc = bigNum(3, 1);
+   printf("calc : %d\n", calc);
+   calc = bigNum(7, 5);
+   printf("calc : %d\n", calc);
+   return 0;
+}
+
+int bigNum(int num1, int num2) 
+{
+   if(num1 >= num2)
+   {
+      return num1;
+   }
+   else
+   {
+      return num2;
+   }
+}
+```
+C 언어에서는 가장 먼저 main() 함수가 컴파일러에 의해 컴파일된다.
+
+위의 코드에서 컴파일러는 main() 함수에 등장하는 bigNum() 함수를 아직 알지 못하기 때문에 컴파일 오류를 발생시킨다.    
+따라서 컴파일러에 bigNum() 함수는 나중에 정의되어 있다고 알려줘야 한다.    
+그 역할을 하는 것이 바로 함수의 원형(prototype) 선언이다.
+
+위와 같이 차례대로 한 번에 컴파일하는 방식을 단일 패스(one pass) 컴파일 방식이라고 한다.  
+하지만 하드웨어의 발달로 컴파일러에 따라 여러 번에 걸쳐 컴파일하는 다중 패스(multi-pass) 방식이 많아지고 있다.    
+다중 패스 방식의 컴파일러에서는 함수의 원형을 선언하지 않아도 컴파일 오류를 발생시키지 않는다.  
+하지만 오래된 컴파일러는 대부분 단일 패스 방식으로 컴파일하므로, C 표준에서는 여전히 함수의 원형을 정의하고 있다.
+
+함수의 원형 선언은 다음과 같은 방식으로 선언된다.
+```c
+반환타입 함수이름(매개변수타입);
+```
+다음 예제는 앞서 살펴본 예제에 함수의 원형 선언을 추가한 예제이다.   
+이렇게 함수의 원형은 main() 함수 앞에 미리 선언되어야 한다.    
+```c
+#include <stdio.h>
+int bigNum(int, int);
+
+int main(void)
+{
+   int calc;
+
+   calc = bigNum(3, 5);
+   printf("calc : %d\n", calc);
+   calc = bigNum(3, 1);
+   printf("calc : %d\n", calc);
+   calc = bigNum(7, 5);
+   printf("calc : %d\n", calc);
+   return 0;
+}
+
+int bigNum(int num1, int num2) 
+{
+   if(num1 >= num2)
+   {
+      return num1;
+   }
+   else 
+   {
+      return num2;
+   }
+}
+```
+```
+calc : 5
+calc : 3
+calc : 7
+```
