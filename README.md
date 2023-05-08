@@ -2226,3 +2226,34 @@ printf("적금 : %d, 대출 : %d, 총 : %d", prop.savings, prop.loan, hongProp);
 기본적으로 C 언어의 함수는 한 번에 하나의 데이터만을 반환할 수 있다.    
 하지만 이렇게 구조체를 사용하면 여러 개의 데이터를 한 번에 반환할 수 있다.
 
+## 12.3. 중첩된 구조체
+C 언어에서는 구조체를 정의할 때 멤버 변수로 또 다른 구조체를 포함할 수 있다.
+```c
+struct name
+{
+   char first[30];
+   char last[30];
+};
+
+struct friends
+{
+   struct name friendName;
+   char address[30];
+   char job[30];
+};
+
+int main(void)
+{
+   struct friends hong = 
+   {
+      {"길동", "홍"},
+      "서울",
+      "대학생"
+   };
+
+   printf("friend name : %s%s", hong.friendName.last, hong.friendName.first);
+
+   return 0;
+}
+```
+위의 코드에서 friends 구조체는 또 다른 구조체인 name 구조체를 멤버 변수로 포함하고 있다.
