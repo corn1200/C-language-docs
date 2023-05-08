@@ -2167,3 +2167,62 @@ myBook.price = 20000;
 printf("제목 : %s, 저자 : %s, 가격 : %d")
 ```
 
+## 12.2. 함수와 구조체
+C 언어에서는 함수를 호출할 때 전달되는 인수나, 함수가 종료될 때 반환되는 반환값으로 구조체를 사용할 수 있다.   
+그 방식은 기본 타입과 완전히 같으며, 구조체를 가리키는 포인터나 구조체의 한 멤버 변수만을 사용할 수 있어.   
+
+다음 코드는 구조체의 멤버 변수를 함수의 인수로 전달되는 코드다.
+```c
+typedef struct
+{
+   int savings;
+   int loan;
+} PROP;
+
+int main(void)
+{
+   int hongProp;
+   PROP hong = {100000, 400000};
+
+   hongProp = calcProperty(hong.saving, hong.loan);
+
+   printf("적금 : %d, 대출 : %d, 총 %d", hong.saving, hong.loan, hongProp);
+   return 0;
+}
+```
+```
+적금 : 1000000, 대출 : 400000, 총 600000
+```
+위와 같이 구조체를 인수로 전달하는 방식은 함수가 원본 구조체의 복사본을 가지고 작업하므로 안전하다는 장점을 가진다.
+
+다음 코드는 함수의 인수로 구조체의 주소를 직접 전달하는 코드다.
+```c
+int hongProp;
+PROP hong = {1000000, 400000};
+
+hongProp = calcProperty(&hong);
+printf("적금 : %d, 대출 : %d, 총 : %d", hong.savings, hong.loan, hongProp);
+```
+```
+적금 : 100, 대출 : 400000, 총 -399900
+```
+위와 같이 구조체 포인터를 인수로 전달하는 방식은 구조체의 복사본이 아닌 주소 하나만을 전달하므로 처리가 빠르다.   
+하지만 호출된 함수에서 원본 구조체에 직접 접근하므로 원본 데이터의 보호 측면에서는 매우 위험하다.
+
+따라서 다음 코드의 calcProperty() 함수처럼 const 키워드를 사용하여 함수에 전달된 인수를 함수 내에서는 직접 수정할 수 없도록 하는 것이 좋다.
+```c
+PROP prop;
+int hongProp;
+
+prop = initProperty();
+hongProp = calcProperty(&prop);
+
+printf("적금 : %d, 대출 : %d, 총 : %d", prop.savings, prop.loan, hongProp);
+```
+```
+적금 : 1000000, 대출 : 400000, 총 : 600000
+```
+위의 코드에서 initProperty() 함수는 반환값으로 구조체를 직접 반환한다.  
+기본적으로 C 언어의 함수는 한 번에 하나의 데이터만을 반환할 수 있다.    
+하지만 이렇게 구조체를 사용하면 여러 개의 데이터를 한 번에 반환할 수 있다.
+
