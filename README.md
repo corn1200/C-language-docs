@@ -2257,3 +2257,31 @@ int main(void)
 }
 ```
 위의 코드에서 friends 구조체는 또 다른 구조체인 name 구조체를 멤버 변수로 포함하고 있다.
+
+## 12.4. 구조체의 크기
+일반적으로 구조체의 크기는 멤버 변수들의 크기에 따라 결정된다.    
+하지만 구조체의 크기가 언제나 멤버 변수들의 크기 총합과 일치하는 것은 아니다.
+```c
+typedef struct
+{
+   char a;
+   int b;
+   double c;
+} TYPESIZE;
+
+int main(void)
+{
+   printf("%d %d %d\n", sizeof(char), sizeof(int), sizeof(double));
+
+   printf("%d", sizeof(TYPESIZE));
+
+   return 0;
+}
+```
+```
+1 4 8
+16
+```
+위의 코드에서 구조체 멤버 변수의 크기는 각각 1, 4, 8바이트다.  
+하지만 구조체의 크기는 멤버 변수들의 크기 총합인 13바이트가 아니라 16바이트가 된다.
+
