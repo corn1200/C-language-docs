@@ -2311,7 +2311,7 @@ int main(void)
 이러한 공용체는 크기가 가장 큰 멤버 변수의 크기로 메모리를 할당받는다.  
 따라서 공용체 배열을 사용하면, 같은 크기로 구성된 배열 요소에 다양한 크기의 데이터를 저장할 수 있다.
 
-다음 예제는 공용체의 멤버 변수를 단 하나만 초기화해도, 나머지 멤버 변수들이 모두 같은 데이터를 공유한다는 것을 보여주는 예제이다.
+다음 코드는 공용체의 멤버 변수를 단 하나만 초기화해도, 나머지 멤버 변수들이 모두 같은 데이터를 공유한다는 것을 보여주는 코드다.
 ```c
 typedef union
 {
@@ -2339,3 +2339,69 @@ int main(void)
 ```
 공용체에 저장된 값의 의미는 값을 저장할 때 공용체의 어떤 멤버 변수를 사용했는지에 따라 전혀 달리 해석된다.  
 따라서 공용체의 어떤 멤버 변수를 사용하여 저장했는지를 별도로 저장하여, 접근할 때에도 같은 멤버 변수를 사용해야 한다.
+
+## 12.7. 열거체
+열거체(enumerated types)는 새로운 타입을 선언하면서, 동시에 해당 타입이 가질 수 있는 정수형 상숫값도 같이 명시할 수 있는 타입이다.  
+이러한 열거체를 이용하면 프로그램의 가독성이 높아지고, 변수가 지니는 값에 의미를 부여할 수 있게 된다.
+```c
+enum Weather {SUNNY = 0, CLOUD = 10, RAIN = 20, SNOW = 30};
+int main(void)
+{
+   enum Weather wt;
+   wt = SUNNY;
+
+   switch(wt)
+   {
+      case SUNNY:
+         printf("SUNNY\n");
+         break;
+      case CLOUD:
+         printf("CLOUD\n");
+         break;
+      case RAIN:
+         printf("RAIN\n");
+         break;
+      case SNOW:
+         printf("SNOW\n");
+         break;
+      default:
+         printf("NON\n");
+   }
+
+   printf("%d %d %d %d\n", SUNNY, CLOUD, RAIN, SNOW);
+
+   return 0;
+}
+```
+```
+SUNNY
+0 10 20 30
+```
+C 언어에서 열거체는 enum 키워드를 사용하여 선언한다.  
+위의 코드처럼 사용자가 별도로 각 멤버에 해당하는 상숫값을 명시할 수 있다.  
+이때 상숫값을 따로 명시하지 않으면 0부터 시작되며, 그 다음 멤버의 값은 바로 앞 멤버의 값보다 1만큼 증가되며 정의된다.
+```c
+enum Days {MON, TUE, WED, THU, FRI, SAT, SUN};
+int main(void)
+{
+   enum Days today;
+   today = SAT;
+
+   if(today >= SAT && today <= SUN)
+   {
+      printf("weeknd\n");
+   }
+   else
+   {
+      printf("D-%d weeknd\n", 5 - today);
+   }
+
+   printf("%d %d %d %d %d %d %d", MON, TUE, WED, THU, FRI, SAT, SUN);
+
+   return 0;
+}
+```
+```
+weeknd
+0 1 2 3 4 5 6
+```
