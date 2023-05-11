@@ -2813,3 +2813,122 @@ extern 키워드가 붙은 전역 변수는 컴파일된 후, 링크 때가 돼�
 다음 그림은 extern 키워드로 선언된 변수와 static 키워드로 선언된 변수에 접근할 수 있는 영역을 보여준다.
 
 ![변수 접근 영역](/img/img_c_compile_extern_static.png)
+
+## 14.3. 조건부 컴파일
+조건부 컴파일을 사용하면 지정한 조건에 따라 코드의 일정 부분을 컴파일할지 안 할지를 지정할 수 있다.   
+이러한 조건부 컴파일에 사용할 수 있는 조건부 컴파일 지시자(conditional compile directive)는 다음과 같다.
+
+1. #if
+2. #ifdef
+3. #ifndef
+
+### #if
+#if 지시자를 이용한 조건부 컴파일의 사용법은 C언어의 if 조건문과 매우 비슷하다.
+
+#if 지시자를 이용한 조건부 컴파일의 형식은 다음과 같다.
+```c
+#if 조건식1
+   컴파일할 명령문1
+#elif 조건식2
+   컴파일할 명령문2
+#else
+   컴파일할 명령문3
+#endif
+```
+#if 지시자 다음에 나오는 조건식1의 결과가 0이 아니면 참, 0이면 거짓으로 간주한다.   
+또한, #elif 지시자를 사용하여 조건식을 여러 개 사용할 수도 있다.  
+#else 지시자를 사용하여 모든 조건에 해당하지 않는 경우를 지정할 수도 있다.
+
+> C언어의 조건문과는 달리 #endif 지시자를 사용하여 반드시 조건부 컴파일의 끝을 명시해야 한다.
+
+```c
+#include <stdio.h>
+#define COND 2
+
+int main(void)
+{
+   #if COND == 1
+      printf("COND : 1\n");
+   #elif COND == 2
+      printf("COND : 2\n");
+   #elif COND == 3
+      printf("COND : 3\n");
+   #endif
+   return 0;
+}
+```
+```
+COND : 2
+```
+
+### #ifdef
+여러 개의 헤더 파일을 작성한 후에 전부 합치다 보면, 같은 이름의 변수나 함수가 중복으로 선언되어 있을 가능성이 있다.  
+이러한 경우에는 #ifdef 지시자를 사용하여 중복 선언의 가능성을 없앨 수 있다.
+
+#ifdef 지시자를 이용한 조건부 컴파일의 형식은 다음과 같다.
+```c
+#ifdef 매크로이름
+   컴파일할 명령문1
+#elif 조건식
+   컴파일할 명령문2
+#else
+   컴파일할 명령문3
+#endif
+```
+#ifdef는 'if defined'라는 문장을 줄여서 만든 것으로 #ifdef 지시자 다음에 나오는 매크로 이름과 같은 이름의 매크로가 이미 정의되어 있으면, 컴파일할 명령문1이 컴파일될 것이다.  
+만약 매크로 이름과 같은 이름의 매크로가 정의되어 있지 않으면, 컴파일할 명령문1은 컴파일되지 않고 넘어갈 것이다.   
+또한, #elif 지시자와 #else 지시자를 사용하여 컴파일의 조건을 확장할 수도 있다.
+```c
+#include <stdio.h>
+#define PI 3.14
+
+int main(void)
+{
+   #ifdef PI
+      printf("defined PI : %.2f\n", PI);
+   #else
+      printf("undefined PI\n");
+   #endif
+   return 0;
+}
+```
+```
+defined PI : 3.14
+```
+
+### #ifndef
+#ifndef 지시자를 이용한 조건부 컴파일의 사용법은 #ifdef 지시자를 이용한 조건부 컴파일과 거의 같다.    
+다만 #ifndef 지시자는 #ifdef 지시자와는 정반대의 조건을 검사하게 된다.
+
+#ifndef 지시자를 이용한 조건부 컴파일의 형식은 다음과 같다.
+```c
+#ifndef 매크로이름
+   컴파일할 명령문1
+#elif
+   컴파일할 명령문2
+#else
+   컴파일할 명령문3
+#endif
+```
+#ifndef는 'if not defined'라는 문장을 줄여서 만든 것으로 #ifndef 지시자 다음에 나오는 매크로 이름과 같은 이름의 매크로가 앞서 정의되어 있지 않으면, 컴파일할 명령문1이 컴파일될 것이다.   
+만약 매크로 이름과 같은 이름의 매크로가 앞서 정의되어 있으면, 컴파일할 명령문1은 컴파일되지 않고 넘어갈 것이다.   
+또한, #elif 지시자와 #else 지시자를 사용하여 컴파일의 조건을 확장할 수도 있다.
+```c
+#include <stdio.h>
+// #define PI 3.14
+
+int main(void)
+{
+   #ifndef PI
+      printf("undefined PI\n");
+   #else
+      printf("defined PI : %.2f\n", PI);
+   #endif
+   return 0;
+}
+```
+```
+undefined PI
+```
+
+> 사용자 헤더 파일을 선언할 때에는 중복 선언을 피하기 위해 파일 내의 모든 내용을 #ifdef 나 #ifndef, #endif 지시자로 감싸는 것이 좋다.
